@@ -13,6 +13,7 @@
 		1FA43BDA224E569A00F565CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FA43BD9224E569A00F565CB /* Assets.xcassets */; };
 		1FA43BDD224E569A00F565CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FA43BDB224E569A00F565CB /* LaunchScreen.storyboard */; };
 		1FA43BE8224E569A00F565CB /* SimpleCalcTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA43BE7224E569A00F565CB /* SimpleCalcTests.swift */; };
+		24149D7624F4121500DEFE1E /* UITextView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24149D7524F4121500DEFE1E /* UITextView+Extensions.swift */; };
 		EBB0B823206E55D8ACAA8296 /* Pods_CountOnMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33AB068487E582064553A8F /* Pods_CountOnMe.framework */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		1FA43BE3224E569A00F565CB /* CountOnMeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CountOnMeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FA43BE7224E569A00F565CB /* SimpleCalcTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCalcTests.swift; sourceTree = "<group>"; };
 		1FA43BE9224E569A00F565CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		24149D7524F4121500DEFE1E /* UITextView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+Extensions.swift"; sourceTree = "<group>"; };
 		275489B4BCB65DF2C465847C /* Pods-CountOnMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CountOnMe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CountOnMe/Pods-CountOnMe.debug.xcconfig"; sourceTree = "<group>"; };
 		D33AB068487E582064553A8F /* Pods_CountOnMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CountOnMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC706192D1889F691676F355 /* Pods-CountOnMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CountOnMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-CountOnMe/Pods-CountOnMe.release.xcconfig"; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 		1FA43BD1224E569900F565CB /* CountOnMe */ = {
 			isa = PBXGroup;
 			children = (
+				24149D7424F411F900DEFE1E /* Extensions */,
 				249DA87F24F3D60900FDFC90 /* Supporting Files */,
 				249DA87C24F3D5E300FDFC90 /* Model */,
 				249DA87D24F3D5EB00FDFC90 /* View */,
@@ -101,6 +104,14 @@
 				1FA43BE9224E569A00F565CB /* Info.plist */,
 			);
 			path = CountOnMeTests;
+			sourceTree = "<group>";
+		};
+		24149D7424F411F900DEFE1E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				24149D7524F4121500DEFE1E /* UITextView+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		249DA87C24F3D5E300FDFC90 /* Model */ = {
@@ -300,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FA43BD5224E569900F565CB /* ViewController.swift in Sources */,
+				24149D7624F4121500DEFE1E /* UITextView+Extensions.swift in Sources */,
 				1FA43BD3224E569900F565CB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,9 +9,11 @@
 import UIKit
 
 class ViewController: UIViewController {
+    // MARK: - Outlets
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
 
+    // MARK: - Internal properties
     var elements: [String] {
         return textView.text.split(separator: " ").map { "\($0)" }
     }
@@ -33,13 +35,7 @@ class ViewController: UIViewController {
         return textView.text.firstIndex(of: "=") != nil
     }
 
-    // View Life cycles
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
-
-    // View actions
+    // MARK: - View actions
     @IBAction func tappedNumberButton(_ sender: UIButton) {
         guard let numberText = sender.title(for: .normal) else {
             return
@@ -48,17 +44,22 @@ class ViewController: UIViewController {
             textView.text = ""
         }
         textView.text.append(numberText)
+        textView.scrollToBottom()
+    }
+    
+    @IBAction func tappedAllClearButton(_ sender: UIButton) {
+        print("TO DO: all clear action")
+    }
+
+    @IBAction func tappedClearLastEntryButton(_ sender: UIButton) {
+        print("TO DO: clear last entry action")
     }
 
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
         if canAddOperator {
             textView.text.append(" + ")
         } else {
-            let alertVC = UIAlertController(title: "Zéro!",
-                                            message: "Un operateur est déja mis !",
-                                            preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertVC, animated: true, completion: nil)
+            presentAlert(with: "Un operateur est déja mis !")
         }
     }
 
@@ -66,29 +67,17 @@ class ViewController: UIViewController {
         if canAddOperator {
             textView.text.append(" - ")
         } else {
-            let alertVC = UIAlertController(title: "Zéro!",
-                                            message: "Un operateur est déja mis !",
-                                            preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertVC, animated: true, completion: nil)
+            presentAlert(with: "Un operateur est déja mis !")
         }
     }
 
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         guard expressionIsCorrect else {
-            let alertVC = UIAlertController(title: "Zéro!",
-                                            message: "Entrez une expression correcte !",
-                                            preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            return self.present(alertVC, animated: true, completion: nil)
+            return presentAlert(with: "Entrez une expression correcte !")
         }
 
         guard expressionHaveEnoughElement else {
-            let alertVC = UIAlertController(title: "Zéro!",
-                                            message: "Démarrez un nouveau calcul !",
-                                            preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            return self.present(alertVC, animated: true, completion: nil)
+            return presentAlert(with: "Démarrez un nouveau calcul !")
         }
 
         // Create local copy of operations
@@ -112,6 +101,16 @@ class ViewController: UIViewController {
         }
 
         textView.text.append(" = \(operationsToReduce.first!)")
+        textView.scrollToBottom()
+    }
+
+    // MARK: - Fileprivate function
+    fileprivate func presentAlert(with message: String) {
+        let alertController = UIAlertController(title: "Erreur",
+                                        message: message,
+                                        preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alertController, animated: true, completion: nil)
     }
 
 }
