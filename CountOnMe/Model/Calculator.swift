@@ -7,18 +7,19 @@
 //
 
 class Calculator {
-    // MARK: - Internal property
+    // MARK: - Internal properties
     var currentText = ""
-
-    // MARK: - Fileprivate properties
-    fileprivate var elements: [String] {
+    
+    var elements: [String] {
         return currentText.split(separator: " ").map { "\($0)" }
     }
-
+    
     // Error check computed variables
-    fileprivate var expressionIsCorrect: Bool {
+    var expressionIsCorrect: Bool {
         isValidExpressionOrOperator()
     }
+
+    // MARK: - Fileprivate properties
 
     fileprivate  var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
