@@ -13,94 +13,51 @@ class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
 
-    // MARK: - Internal properties
-    var elements: [String] {
-        return textView.text.split(separator: " ").map { "\($0)" }
-    }
-
-    // Error check computed variables
-    var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-"
-    }
-
-    var expressionHaveEnoughElement: Bool {
-        return elements.count >= 3
-    }
-
-    var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-"
-    }
-
-    var expressionHaveResult: Bool {
-        return textView.text.firstIndex(of: "=") != nil
-    }
+    // MARK: - Property
+    lazy var calculator = Calculator(currentText: textView.text)
 
     // MARK: - View actions
     @IBAction func tappedNumberButton(_ sender: UIButton) {
         guard let numberText = sender.title(for: .normal) else {
             return
         }
-        if expressionHaveResult {
-            textView.text = ""
-        }
-        textView.text.append(numberText)
+
+        calculator.addNumber(number: numberText)
+        textView.text = calculator.currentText
         textView.scrollToBottom()
     }
-    
+
     @IBAction func tappedAllClearButton(_ sender: UIButton) {
-        print("TO DO: all clear action")
+        calculator.clearAll()
+        textView.text = calculator.currentText
     }
 
     @IBAction func tappedClearLastEntryButton(_ sender: UIButton) {
-        print("TO DO: clear last entry action")
+        calculator.clearLastEntry()
+        textView.text = calculator.currentText
     }
 
-    @IBAction func tappedAdditionButton(_ sender: UIButton) {
-        if canAddOperator {
-            textView.text.append(" + ")
-        } else {
-            presentAlert(with: "Un operateur est déja mis !")
+    @IBAction func tappedOperatorButton(_ sender: UIButton) {
+        guard let textOperator = sender.title(for: .normal) else {
+            return
         }
-    }
 
-    @IBAction func tappedSubstractionButton(_ sender: UIButton) {
-        if canAddOperator {
-            textView.text.append(" - ")
-        } else {
-            presentAlert(with: "Un operateur est déja mis !")
+        guard calculator.addOperator(operator: textOperator) else {
+            return presentAlert(with: "Un opérateur a déjà été ajouté.")
         }
+
+        textView.text = calculator.currentText
+        textView.scrollToBottom()
     }
 
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        guard expressionIsCorrect else {
-            return presentAlert(with: "Entrez une expression correcte !")
+        let resultStatus = calculator.calculate()
+
+        guard  resultStatus.validity else {
+            return presentAlert(with: resultStatus.message)
         }
 
-        guard expressionHaveEnoughElement else {
-            return presentAlert(with: "Démarrez un nouveau calcul !")
-        }
-
-        // Create local copy of operations
-        var operationsToReduce = elements
-
-        // Iterate over operations while an operand still here
-        while operationsToReduce.count > 1 {
-            let left = Int(operationsToReduce[0])!
-            let operand = operationsToReduce[1]
-            let right = Int(operationsToReduce[2])!
-
-            let result: Int
-            switch operand {
-            case "+": result = left + right
-            case "-": result = left - right
-            default: fatalError("Unknown operator !")
-            }
-
-            operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            operationsToReduce.insert("\(result)", at: 0)
-        }
-
-        textView.text.append(" = \(operationsToReduce.first!)")
+        textView.text = calculator.currentText
         textView.scrollToBottom()
     }
 
@@ -112,5 +69,4 @@ class ViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         present(alertController, animated: true, completion: nil)
     }
-
 }
