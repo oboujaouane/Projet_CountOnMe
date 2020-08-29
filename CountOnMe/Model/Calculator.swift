@@ -9,14 +9,18 @@
 class Calculator {
     // MARK: - Internal properties
     var currentText = ""
-    
+
     var elements: [String] {
         return currentText.split(separator: " ").map { "\($0)" }
     }
-    
+
     // Error check computed variables
     var expressionIsCorrect: Bool {
         isValidExpressionOrOperator()
+    }
+
+    var isImpossibleToDivide: Bool {
+        return currentText.contains(" ÷ 0")
     }
 
     // MARK: - Fileprivate properties
@@ -127,6 +131,7 @@ class Calculator {
                 case .division:
                     result = firstOperand / secondOperand
                 }
+
                 operations.remove(at: index+1)
                 operations.remove(at: index)
                 operations.remove(at: index-1)
@@ -141,24 +146,18 @@ class Calculator {
                 if operations[index] == "×" {
                     executeOperation(.multiplication)
                 } else if operations[index] == "÷" {
-                    if let secondOperand = Float(operations[index+1]), secondOperand == 0 {
+                    if isImpossibleToDivide {
                         return (false, "Impossible de diviser par 0 !")
                     } else {
                         executeOperation(.division)
                     }
                 }
-                index += 1
             } else {
-                index = 0
-                break
-            }
-        }
-
-        while index < operations.count - 1 {
-            if operations[index] == "+" {
-                executeOperation(.addition)
-            } else if operations[index] == "-" {
-                executeOperation(.substraction)
+                if operations[index] == "+" {
+                    executeOperation(.addition)
+                } else if operations[index] == "-" {
+                    executeOperation(.substraction)
+                }
             }
             index += 1
         }
