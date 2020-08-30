@@ -10,12 +10,11 @@ class Calculator {
     // MARK: - Internal properties
     var currentText = ""
 
-    var elements: [String] {
-        return currentText.split(separator: " ").map { "\($0)" }
+    var expressionIsCorrect: Bool {
+        isValidExpressionOrOperator()
     }
 
-    // Error check computed variables
-    var expressionIsCorrect: Bool {
+    var canAddOperator: Bool {
         isValidExpressionOrOperator()
     }
 
@@ -23,19 +22,19 @@ class Calculator {
         return currentText.contains(" ÷ 0")
     }
 
+    // check if currentText already contains an operation with a result or no
+    var expressionHaveResult: Bool {
+        return currentText.firstIndex(of: "=") != nil
+    }
+
     // MARK: - Fileprivate properties
+
+    fileprivate var elements: [String] {
+        return currentText.split(separator: " ").map { "\($0)" }
+    }
 
     fileprivate  var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
-    }
-
-    fileprivate var canAddOperator: Bool {
-        isValidExpressionOrOperator()
-    }
-
-    // check if currentText already contains an operation with a result or no
-    fileprivate var expressionHaveResult: Bool {
-        return currentText.firstIndex(of: "=") != nil
     }
 
     // MARK: - Initialization
@@ -49,12 +48,7 @@ class Calculator {
         currentText = "0"
     }
 
-    // Remove last element
-    func clearLastEntry() {
-        if currentText == "0" {
-            return
-        }
-
+    func updateCurrentTextIfExpressionAlreadyHaveAResult() {
         if expressionHaveResult {
             if let firstCharacterToTrim = currentText.firstIndex(of: "=") {
                 for character in currentText {
@@ -68,6 +62,15 @@ class Calculator {
                 currentText = "0"
             }
         }
+    }
+
+    // Remove last element
+    func clearLastEntry() {
+        if currentText == "0" {
+            return
+        }
+
+        updateCurrentTextIfExpressionAlreadyHaveAResult()
 
         currentText.remove(at: currentText.index(before: currentText.endIndex))
 
