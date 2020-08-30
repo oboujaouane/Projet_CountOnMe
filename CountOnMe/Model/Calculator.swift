@@ -23,18 +23,18 @@ class Calculator {
     }
 
     // check if currentText already contains an operation with a result or no
-    var expressionHaveResult: Bool {
+    var expressionHasResult: Bool {
         return currentText.firstIndex(of: "=") != nil
+    }
+
+    var expressionHasEnoughElement: Bool {
+        return elements.count >= 3
     }
 
     // MARK: - Fileprivate properties
 
     fileprivate var elements: [String] {
         return currentText.split(separator: " ").map { "\($0)" }
-    }
-
-    fileprivate  var expressionHaveEnoughElement: Bool {
-        return elements.count >= 3
     }
 
     // MARK: - Initialization
@@ -48,8 +48,8 @@ class Calculator {
         currentText = "0"
     }
 
-    func updateCurrentTextIfExpressionAlreadyHaveAResult() {
-        if expressionHaveResult {
+    func removeLastEntryOfCurrentText() {
+        if expressionHasResult {
             if let firstCharacterToTrim = currentText.firstIndex(of: "=") {
                 for character in currentText {
                     if let index = currentText.lastIndex(of: character) {
@@ -58,9 +58,12 @@ class Calculator {
                         }
                     }
                 }
-            } else {
-                currentText = "0"
             }
+        } else {
+            if let lastCharacter = currentText.last, lastCharacter == " " {
+                currentText.removeLast()
+            }
+            currentText.removeLast()
         }
     }
 
@@ -70,20 +73,18 @@ class Calculator {
             return
         }
 
-        updateCurrentTextIfExpressionAlreadyHaveAResult()
-
-        currentText.remove(at: currentText.index(before: currentText.endIndex))
-
-        if currentText.isEmpty {
-            currentText = "0"
+        removeLastEntryOfCurrentText()
+    }
+    
+    func emptyCurrentTextIfExpressionHasResult() {
+        if expressionHasResult {
+            currentText = ""
         }
     }
 
     // Add number for calculation
     func addNumber(number: String) {
-        if expressionHaveResult {
-            currentText = ""
-        }
+        emptyCurrentTextIfExpressionHasResult()
         currentText = currentText == "0" ? number : currentText + number
     }
 
@@ -93,7 +94,7 @@ class Calculator {
             return false
         }
 
-        if let lastElement = elements.last, expressionHaveResult {
+        if let lastElement = elements.last, expressionHasResult {
             currentText = lastElement
         }
 
@@ -106,16 +107,15 @@ class Calculator {
             return (false, "Veuillez entrer une expression correcte.")
         }
 
-        guard expressionHaveEnoughElement else {
+        guard expressionHasEnoughElement else {
             return (false, "Veuillez démarrer un nouveau calcul.")
         }
 
-        guard !expressionHaveResult else {
+        if expressionHasResult {
             if let lastElement = elements.last {
                 currentText = lastElement
                 return (true, "\(lastElement)")
             }
-            return (false, "0")
         }
 
         var operations = elements
